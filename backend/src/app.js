@@ -24,7 +24,7 @@ app.use("/api/v1/users" ,userRoutes)
 const start = async () => {
     
     const connectionDb = await mongoose.connect(process.env.MONGO_URI);
-    console.log(`Database connected successfully : ${connectionDb.connection.host}`)
+    // console.log(`Database connected successfully : ${connectionDb.connection.host}`)
     server.listen(app.get("port"), () => {
         console.log("Server is running on port " + app.get("port"))
     })
