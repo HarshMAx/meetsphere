@@ -3,30 +3,63 @@ import httpStatus from "http-status";
 import bcrypt,{hash} from "bcrypt";
 import crypto from "crypto";
 
-const login = async(req,res)=> {
+// const login = async(req,res)=> {
 
-    const {username,password} = req.body;
-    if(!username||!password){
-        return res.status(httpStatus.BAD_REQUEST).json({message:"All fields are required"})
+//     const {username,password} = req.body;
+//     if(!username||!password){
+//         return res.status(httpStatus.BAD_REQUEST).json({message:"All fields are required"})
+//     }
+
+//     try{
+
+//         const user = await User.findOne({username})
+//         if(!user){
+//             return res.status(httpStatus.NOT_FOUND).json({message:"User not found"})
+//         }
+//         if(bcrypt.compare(password,user.password)){
+//             let token = await crypto.randomBytes(64).toString("hex")
+//             user.token = token;
+//             await user.save()
+//             res.status(httpStatus.OK).json({message:"Login successful"})
+//         }else{
+//             res.status(httpStatus.UNAUTHORIZED).json({message:"Invalid credentials"})
+//         }
+
+//     }catch(e){
+//         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:"Some thing went wrong"})
+//     }
+// }
+
+
+const login = async (req, res) => {
+
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ message: "Please Provide" })
     }
 
-    try{
-
-        const user = await User.findOne({username})
-        if(!user){
-            return res.status(httpStatus.NOT_FOUND).json({message:"User not found"})
+    try {
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(httpStatus.NOT_FOUND).json({ message: "User Not Found" })
         }
-        if(bcrypt.compare(password,user.password)){
-            let token = await crypto.randomBytes(64).toString("hex")
+
+
+        let isPasswordCorrect = await bcrypt.compare(password, user.password)
+
+        if (isPasswordCorrect) {
+            let token = crypto.randomBytes(20).toString("hex");
+
             user.token = token;
-            await user.save()
-            res.status(httpStatus.OK).json({message:"Login successful"})
-        }else{
-            res.status(httpStatus.UNAUTHORIZED).json({message:"Invalid credentials"})
+            await user.save();
+            return res.status(httpStatus.OK).json({ token: token })
+        } else {
+            return res.status(httpStatus.UNAUTHORIZED).json({ message: "Invalid Username or password" })
         }
 
-    }catch(e){
-        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:"Some thing went wrong"})
+    } catch (e) {
+        return res.status(500).json({ message: `Something went wrong ${e}` })
     }
 }
 
