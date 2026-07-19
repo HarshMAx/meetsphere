@@ -35,10 +35,10 @@ const VideoMeet = () => {
     let [video, setVideo] = useState([]);
     let [audio, setAudio] = useState(true);
     let [screen,setScreen] = useState()
-    let [showModel,setShowModel] = useState()
+    let [showModel,setShowModel] = useState(false)
     let [screenAvailable,setScreenAvailable] = useState()
     let [messages , setMessages] = useState([])
-    let [message,setMessage] = useState()
+    let [message,setMessage] = useState("")
     let [newMessage,setNewMessage] = useState(3)
     let [askForUserName , setAskForUserName] = useState(true)
     let [userName , setUserName] = useState("")
@@ -178,7 +178,7 @@ const VideoMeet = () => {
 
     let openChat = () => {
         setShowModel(true);
-        setNewMessages(0);
+        setNewMessage(0);
     }
     let closeChat = () => {
         setShowModel(false);
@@ -272,7 +272,7 @@ const VideoMeet = () => {
             { sender: sender, data: data }
         ]);
         if (socketIdSender !== socketIdRef.current) {
-            setNewMessages((prevNewMessages) => prevNewMessages + 1);
+            setNewMessage((prevNewMessages) => prevNewMessages + 1);
         }
     };
 

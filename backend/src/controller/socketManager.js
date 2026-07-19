@@ -63,7 +63,7 @@ const connectToSocket = (server) => {
                         'sender':sender,
                         'socket-id-sender':socket.id
                     })
-                    console.log("message",key, ":" ,sender ,data)
+                    console.log("message",matchingRoom, ":" ,sender ,data)
                     connections[matchingRoom].forEach((socketId)=>{
                         io.to(socketId).emit("chat-message",data,sender,socket.id)
                     })
