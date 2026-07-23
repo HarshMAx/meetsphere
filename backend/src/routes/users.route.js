@@ -1,11 +1,11 @@
 import {Router} from "express";
-import {login,register} from '../controller/user.controller.js'
+import {addToHistory, getUserHistory, login,register} from '../controller/user.controller.js'
 
 const router = Router()
 
 router.route("/login").post(login)
 router.route("/register").post(register)
-router.route("/add-to-activity")
-router.route("/get-all-activity")
+router.route("/add-to-activity").post(addToHistory)
+router.route("/get-all-activity").get(getUserHistory)
 
 export default router

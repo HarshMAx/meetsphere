@@ -305,13 +305,11 @@ const VideoMeet = () => {
             socketRef.current.emit("join-call",window.location.href)
 
             socketIdRef.current = socketRef.current.id
-            socketRef.current.on("chat-message",addMessage)
-            socketRef.current.on("user-left",(id)=>{
-                setVideos((videos)=>{
-                    videos.filter((video)=>{
-                        video.socketId !== id
-                    })
-                })
+            socketRef.current.on("chat-message", addMessage)
+            socketRef.current.on("user-left", (id) => {
+                setVideos((videos) =>
+                    videos.filter(video => video.socketId !== id)
+                );
             })
 
             socketRef.current.on("user-joined",(id,clients)=>{
@@ -329,8 +327,10 @@ const VideoMeet = () => {
                         if (videoExists) {
                             setVideos(video => {
                                 const updateVideos = video.map(video => {
-                                    video.socketId == socketListId ? { ...video, stream: event.stream } : video
-                                })
+                                    return video.socketId === socketListId
+                                        ? { ...video, stream: event.stream }
+                                        : video;
+                                });
                                 videoRef.current = updateVideos
                                 return updateVideos
                             })
